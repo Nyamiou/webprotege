@@ -2,7 +2,11 @@ package edu.stanford.bmir.protege.web.server.cmdline;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
-import edu.stanford.bmir.protege.web.server.access.*;
+import edu.stanford.bmir.protege.web.server.access.AccessManager;
+import edu.stanford.bmir.protege.web.server.access.AccessManagerImpl;
+import edu.stanford.bmir.protege.web.server.access.ApplicationResource;
+import edu.stanford.bmir.protege.web.server.access.RoleOracleImpl;
+import edu.stanford.bmir.protege.web.server.access.Subject;
 import edu.stanford.bmir.protege.web.server.app.WebProtegeProperties;
 import edu.stanford.bmir.protege.web.server.collection.CollectionIdConverter;
 import edu.stanford.bmir.protege.web.server.filemanager.ConfigDirectorySupplier;
@@ -10,13 +14,21 @@ import edu.stanford.bmir.protege.web.server.filemanager.ConfigInputStreamSupplie
 import edu.stanford.bmir.protege.web.server.form.FormIdConverter;
 import edu.stanford.bmir.protege.web.server.inject.MongoClientProvider;
 import edu.stanford.bmir.protege.web.server.inject.WebProtegePropertiesProvider;
-import edu.stanford.bmir.protege.web.server.persistence.*;
+import edu.stanford.bmir.protege.web.server.persistence.CommentIdConverter;
+import edu.stanford.bmir.protege.web.server.persistence.MorphiaProvider;
+import edu.stanford.bmir.protege.web.server.persistence.OWLEntityConverter;
+import edu.stanford.bmir.protege.web.server.persistence.ProjectIdConverter;
+import edu.stanford.bmir.protege.web.server.persistence.ThreadIdConverter;
+import edu.stanford.bmir.protege.web.server.persistence.UserIdConverter;
 import edu.stanford.bmir.protege.web.server.user.UserRecord;
 import edu.stanford.bmir.protege.web.server.user.UserRecordConverter;
 import edu.stanford.bmir.protege.web.server.user.UserRecordRepository;
 import edu.stanford.bmir.protege.web.shared.access.BuiltInRole;
-import edu.stanford.bmir.protege.web.shared.app.WebProtegePropertyName;
-import edu.stanford.bmir.protege.web.shared.auth.*;
+import edu.stanford.bmir.protege.web.shared.auth.Md5DigestAlgorithmProvider;
+import edu.stanford.bmir.protege.web.shared.auth.PasswordDigestAlgorithm;
+import edu.stanford.bmir.protege.web.shared.auth.Salt;
+import edu.stanford.bmir.protege.web.shared.auth.SaltProvider;
+import edu.stanford.bmir.protege.web.shared.auth.SaltedPasswordDigest;
 import edu.stanford.bmir.protege.web.shared.user.UserId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -125,9 +137,8 @@ public class SetupTools {
 
     private static MongoClient getMongoClient() throws IOException {
         WebProtegeProperties properties = getWebProtegeProperties();
-        String dbHost = properties.getDBHost().orElse("localhost");
-        int dbPort = Integer.parseInt(properties.getDBPort().orElse(WebProtegePropertyName.MONGO_DB_PORT.toString()));
-        return new MongoClientProvider(dbHost, dbPort).get();
+        String dbUri = properties.getDBUri().orElse("mongodb://localhost:27017");
+        return new MongoClientProvider(dbUri).get();
     }
 
     private static Morphia getMorphia() {

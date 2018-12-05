@@ -5,22 +5,17 @@ import edu.stanford.bmir.protege.web.server.app.WebProtegeProperties;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-/**
- * Matthew Horridge
- * Stanford Center for Biomedical Informatics Research
- * 04/03/15
- */
-public class DbHostProvider implements Provider<String> {
+public class DbUriProvider implements Provider<String> {
 
     private WebProtegeProperties webProtegeProperties;
 
     @Inject
-    public DbHostProvider(WebProtegeProperties webProtegeProperties) {
+    public DbUriProvider(WebProtegeProperties webProtegeProperties) {
         this.webProtegeProperties = webProtegeProperties;
     }
 
     @Override
     public String get() {
-        return webProtegeProperties.getDBHost().get();
+        return webProtegeProperties.getDBUri().get();
     }
 }

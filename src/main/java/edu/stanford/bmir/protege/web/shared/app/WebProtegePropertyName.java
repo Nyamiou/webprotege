@@ -30,11 +30,8 @@ public enum WebProtegePropertyName {
     @WebProtegePropertiesDocumentation(description = "The directory where WebProtégé data is stored", example = "/src/webprotege")
     DATA_DIRECTORY("data.directory"),
 
-    @WebProtegePropertiesDocumentation(description = "The host name of the mongodb server", example = "localhost")
-    MONGO_DB_HOST("mongodb.host", PropertyValue.ofString("localhost")),
-
-    @WebProtegePropertiesDocumentation(description = "The port number of the mongodb server", example = "27017")
-    MONGO_DB_PORT("mongodb.port", PropertyValue.ofInteger(27017));
+    @WebProtegePropertiesDocumentation(description = "The URI of the mongodb server", example = "mongodb://localhost:27017")
+    MONGO_DB_URI("mongodb.uri", PropertyValue.ofString("mongodb://localhost:27017"));
 
     private static class PropertyValue {
 

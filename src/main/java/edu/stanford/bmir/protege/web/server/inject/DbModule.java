@@ -22,15 +22,9 @@ import javax.inject.Singleton;
 public class DbModule {
 
     @Provides
-    @DbHost
-    public String provideDbHost(DbHostProvider dbHostProvider) {
-        return dbHostProvider.get();
-    }
-
-    @Provides
-    @DbPort
-    public int provideDbPort(DbPortProvider dbPortProvider) {
-        return dbPortProvider.get();
+    @DbUri
+    public String provideDbUri(DbUriProvider dbUriProvider) {
+        return dbUriProvider.get();
     }
 
     @Provides

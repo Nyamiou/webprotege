@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import com.mongodb.MongoClientURI;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -16,19 +17,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MongoClientProvider implements Provider<MongoClient> {
 
     @Nonnull
-    private final String host;
-
-    @Nonnull
-    private final Integer port;
+    private final String uri;
 
     @Inject
-    public MongoClientProvider(@DbHost String dbHost, @DbPort Integer dbPort) {
-        this.host = checkNotNull(dbHost);
-        this.port = checkNotNull(dbPort);
+    public MongoClientProvider(@DbUri String dbUri) {
+        this.uri = checkNotNull(dbUri);
     }
 
     @Override
     public MongoClient get() {
-        return new MongoClient(host, port);
+        return new MongoClient(new MongoClientURI(uri));
     }
 }

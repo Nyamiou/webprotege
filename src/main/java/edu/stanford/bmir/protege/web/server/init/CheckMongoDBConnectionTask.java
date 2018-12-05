@@ -1,9 +1,9 @@
 package edu.stanford.bmir.protege.web.server.init;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoTimeoutException;
-import edu.stanford.bmir.protege.web.server.inject.DbHost;
-import edu.stanford.bmir.protege.web.server.inject.DbPort;
+import edu.stanford.bmir.protege.web.server.inject.DbUri;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -18,20 +18,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class CheckMongoDBConnectionTask implements ConfigurationTask {
 
-    private final String dbHost;
-
-    private final int dbPort;
+    private final String dbUri;
 
     @Inject
-    public CheckMongoDBConnectionTask(@DbHost String dbHost, @DbPort int dbPort) {
-        this.dbHost = checkNotNull(dbHost);
-        this.dbPort = dbPort;
+    public CheckMongoDBConnectionTask(@DbUri String dbUri) {
+        this.dbUri = checkNotNull(dbUri);
     }
 
     @Override
     public void run(ServletContext servletContext) throws WebProtegeConfigurationException {
         try {
-            MongoClient mongoClient = new MongoClient(dbHost, dbPort);
+            MongoClient mongoClient = new MongoClient(new MongoClientURI(dbUri));
             mongoClient.getDatabaseNames();
             mongoClient.close();
         } catch (MongoTimeoutException e) {
@@ -41,10 +38,9 @@ public class CheckMongoDBConnectionTask implements ConfigurationTask {
 
     private String getUnknownHostErrorMessage() {
         return String.format(
-                "Could not connect to database on %s at port %d.  " +
+                "Could not connect to database on %s.  " +
                         "Please make sure the mongod daemon is running at this address.",
-                dbHost,
-                dbPort
+                dbUri
         );
     }
 

@@ -11,7 +11,9 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static edu.stanford.bmir.protege.web.shared.app.WebProtegePropertyName.*;
+import static edu.stanford.bmir.protege.web.shared.app.WebProtegePropertyName.DATA_DIRECTORY;
+import static edu.stanford.bmir.protege.web.shared.app.WebProtegePropertyName.MONGO_DB_URI;
+import static edu.stanford.bmir.protege.web.shared.app.WebProtegePropertyName.values;
 
 /**
  * Accessor methods for the webprotege.properties property values.  The set of properties is read-only.  This is
@@ -108,12 +110,7 @@ public class WebProtegeProperties implements Serializable {
     }
 
     @Nonnull
-    public Optional<String> getDBPort() {
-        return getOptionalString(MONGO_DB_PORT);
-    }
-
-    @Nonnull
-    public Optional<String> getDBHost() {
-        return getOptionalString(MONGO_DB_HOST);
+    public Optional<String> getDBUri() {
+        return getOptionalString(MONGO_DB_URI);
     }
 }
